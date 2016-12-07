@@ -1,4 +1,9 @@
 <ion-view view-title="Dish Details">
+    <ion-nav-buttons side="secondary">
+        <div class="buttons">
+            <button class="button button-icon icon ion-android-more-horizontal" ng-click="openPopover($event)"></button>
+        </div>
+    </ion-nav-buttons>
   <ion-content>
       <div class="card">
           <div class="item item-body item-text-wrap">
@@ -7,6 +12,9 @@
                  <span style="font-size:75%">{{dish.price | currency}}</span>
                 <span class="badge badge-assertive">{{dish.label}}</span></h2>
                 <p>{{dish.description}}</p>
+                <div class="button-bar">
+                    <a class="button button-balanced icon-left ion-ios-chatboxes-outline" ng-click="showCommentModal({{dish.id}})">Add Comment</a>
+                </div>
           </div>
       </div>
       <div class="row">
