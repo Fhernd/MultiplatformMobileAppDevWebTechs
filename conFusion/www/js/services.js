@@ -1,35 +1,21 @@
 'use strict';
 
 angular.module('conFusion.services', ['ngResource'])
-        .constant("baseUrl", "http://localhost:3000/")
-        .service('menuFactory', ['$resource', 'baseUrl', function ($resource, baseUrl) {
+        .constant("baseUrl", "http://192.168.0.10:3000/")
+        .factory('menuFactory', ['$resource', 'baseUrl', function ($resource, baseUrl) {
 
-            this.getDishes = function () {
+            return $resource(baseUrl + "dishes/:id", null, { 
+                'update': { method: 'PUT' } 
+            });
+        }])
 
-                return $resource(baseUrl + "dishes/:id", null, { 'update': { method: 'PUT' } });
-            };
-
-            // implement a function named getPromotion
-            // that returns a selected promotion.
-            this.getPromotions = function() {
-                return $resource(baseUrl + "promotions/:id", null, { 'update': { method: 'PUT' } });
-            };
+        .factory('promotionFactory', ['$resource', 'baseUrl', function ($resource, baseUrl){
+            return $resource(baseUrl + "promotions/:id");
         }])
 
         .factory('corporateFactory', ['$resource', 'baseUrl', function ($resource, baseUrl) {
-
-            var corpFactory = {};
-
-            corpFactory.getLeaders = function () {
-                return $resource(baseUrl + "leadership/:id", null, { 'update': { method: 'PUT' } });
-            }
-
-            // Implement two functions, one named getLeaders,
-            // the other named getLeader(index)
-            // Remember this is a factory not a service
-
-
-            return corpFactory;
+            
+            return $resource(baseUrl + "leadership/:id", null, { 'update': { method: 'PUT' } });
         }])
 
         .factory('feedbackFactory', ['$resource', 'baseUrl', function($resource, baseUrl) {
@@ -70,4 +56,44 @@ angular.module('conFusion.services', ['ngResource'])
 
             return favFac;
         }])
+        .factory('$localStorage', ['$window', function($window) {
+            return {
+                store: function(key, value) {
+                $window.localStorage[key] = value;
+                },
+                get: function(key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+                },
+                storeObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+                },
+                getObject: function(key,defaultValue) {
+                return JSON.parse($window.localStorage[key] || defaultValue);
+                },
+                removeObject: function(key){
+                    $window.localStorage.removeItem(key);
+                }
+            }
+            }])
+        .factory('favoritesFactory', ['$localStorage', function($localStorage){
+
+            var ff = {};
+            var favorites = [];
+
+            ff.getFavorites = function(){
+                for(var id = 0; id < 4; ++id){
+                    if ($localStorage.getObject(id, -1) != -1){
+                        favorites.push($localStorage.getObject(id, '{}'));
+                    }
+                }
+
+                return favorites;
+            };
+
+            ff.removeFavorite = function(index){
+                $localStorage.removeObject(index);
+            }
+            
+            return ff;
+        }] )
 ;

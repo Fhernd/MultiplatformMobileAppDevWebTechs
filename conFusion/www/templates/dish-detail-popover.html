@@ -1,14 +1,12 @@
 <ion-popover-view>
-    <ion-content>   
-        <ion-content>
-          <div class="list">
-            <a class="item" ng-click="addFavorite({{dish.id}})">
-              Add to favorites
-            </a>
-            <a class="item" ng-click="showCommentModal({{dish.id}})">
-              Add Comment
-            </a>
-          </div>
-        </ion-content>
+    <ion-content>
+      <div class="list">
+        <a class="item" ng-click="addFavorite(dish.id)">
+          Add to favorites
+        </a>
+        <a class="item" ng-click="showCommentModal()">
+          Add Comment
+        </a>
+      </div>
     </ion-content>
 </ion-popover-view>
